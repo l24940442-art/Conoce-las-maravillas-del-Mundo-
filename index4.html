@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Las Maravillas del Mundo</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f7fa;
+        }
+
+        /* CORRECCIÓN: Encabezado unificado con el degradado azul de la imagen image_c5a1c5.jpg */
+        header {
+            background: linear-gradient(to right, #1e3c72, #2a5298);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.5rem;
+        }
+
+        header p {
+            margin: 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .banner {
+            background-image: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+        }
+
+        .search-box {
+            margin-top: 20px;
+        }
+
+        .search-box input,
+        .search-box button {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        .search-box button {
+            background-color: #ff9800;
+            color: white;
+            cursor: pointer;
+        }
+
+        .section {
+            padding: 40px 20px;
+        }
+
+        .destinos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            justify-content: center;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .card-content {
+            padding: 15px;
+        }
+
+        .card h3 {
+            margin: 0;
+        }
+
+        .price {
+            color: green;
+            font-weight: bold;
+        }
+
+        footer {
+            background: #1e3c72;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .review-card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-left: 4px solid #ff9800;
+        }
+
+        .review-stars {
+            color: #ff9800;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .review-user {
+            display: block;
+            font-weight: bold;
+            margin-top: 10px;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .promo-btn {
+            background-color: #1e88e5;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            margin: 5px 2px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .promo-btn:hover {
+            background-color: #1565c0;
+            transform: scale(1.05);
+        }
+
+        .promo-btn.selected {
+            background-color: #ff9800;
+            box-shadow: 0 0 8px rgba(255, 152, 0, 0.6);
+        }
+
+        .promo-result {
+            margin-top: 10px;
+        }
+
+        .reservar-btn {
+            background: #43a047;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+            font-weight: bold;
+        }
+
+        .reservar-btn:hover {
+            background: #2e7d32;
+        }
+
+        .overlay-success {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            font-family: Arial, sans-serif;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .modal-success-box {
+            background: #111;
+            border: 3px solid #43a047;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(67, 160, 71, 0.4);
+        }
+
+        .modal-success-box h1 {
+            color: #43a047;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .modal-success-box p {
+            font-size: 1.2rem;
+            margin: 10px 0;
+            color: #e0e0e0;
+        }
+
+        .modal-success-box .details {
+            background: #222;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 5px solid #ff9800;
+            text-align: left;
+        }
+
+        .close-success-btn {
+            background: #43a047;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: 0.3s;
+        }
+
+        .close-success-btn:hover {
+            background: #2e7d32;
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- EL MINIMALISMO DE LA IMAGEN image_c5a1c5.jpg SIN LA BARRA NAV -->
+<header>
+    <h1>🌍 ¡Las maravillas del mundo están aquí!</h1>
+    <p>Explora las 7 maravillas del mundo antiguo y moderno</p>
+</header>
+
+<section class="banner">
+    <h2>Viaja por las maravillas del mundo</h2>
+    <p>Encuentra tu próxima aventura</p>
+
+    <div class="search-box">
+        <input type="text" id="inputDestino" placeholder="Escribe un destino..." list="listaMaravillas">
+        
+        <datalist id="listaMaravillas">
+            <option value="Machu Picchu">
+            <option value="Chichén Itzá">
+            <option value="Coliseo">
+            <option value="Gran Muralla China">
+            <option value="Petra">
+            <option value="Cristo Redentor">
+            <option value="Taj Mahal">
+            <option value="Pirámide de Guiza">
+            <option value="Jardines Colgantes">
+            <option value="Templo de Artemisa">
+            <option value="Estatua de Zeus">
+            <option value="Mausoleo de Halicarnaso">
+            <option value="Coloso de Rodas">
+            <option value="Faro de Alejandría">
+        </datalist>
+
+        <input type="date" id="inputFecha">
+        <input type="number" id="inputPresupuesto" placeholder="Presupuesto Máx (USD)">
+        <button id="btnBuscar">Buscar</button>
+    </div>
+</section>
+
+<section class="section">
+    <h2>🌎 Destinos Destacados</h2>
+
+    <div class="destinos">
+
+        <!-- MACHU PICCHU -->
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1587595431973-160d0d94add1" width="400" height="250">
+            <div class="card-content">
+                <h3>Machu Picchu</h3>
+                <p>📍 Perú</p>
+                <p>Ciudad inca del siglo XV rodeada de montañas.</p>
+                <p class="price">$800 - $2500 USD</p>
+                <button class="promo-btn">Pareja</button>
+                <button class="promo-btn">Familia</button>
+                <button class="promo-btn">Solitario</button>
+                <div class="promo-result"></div>
+                <button class="reservar-btn">Reservar Ahora</button>
+            </div>
+        </div>
+
+        <!-- CHICHEN ITZA -->
+        <div class="card">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/aa/Kukulk%C3%A1n_rodeada_de_azul..JPG" width="400" height="250">
+            <div class="card-content">
+                <h3>Chichén Itzá</h3>
+                <p>📍 México</p>
+                <p>Antigua ciudad maya y maravilla moderna.</p>
+                <p class="price">$300 - $1500 USD</p>
+                <button class="promo-btn">Pareja</button>
+                <button class="promo-btn">Familia</button>
+                <button class="promo-btn">Solitario</button>
+                <div class="promo-result"></div>
+                <button class="reservar-btn">Reservar Ahora</button>
+            </div>
+        </div>
+
+        <!-- COLISEO -->
+        <div class="card">
+            <img src="https://cdn-imgix.headout.com/microbrands-content-image/image/8434f824dff2a1f05b0b91e0c09c83da-AdobeStock_119146497.jpg" width="400" height="250">
+            <div class="card-content">
+                <h3>Coliseo</h3>
+                <p>📍 Italia</p>
+                <p>Gran anfiteatro romano histórico.</p>
+                <p class="price">$700 - $2000 USD</p>
+                <button class="promo-btn">Pareja</button>
+                <button class="promo-btn">Familia</button>
+                <button class="promo-btn">Solitario</button>
+                <div class="promo-result"></div>
+                <button class="reservar-btn">Reservar Ahora</button>
+            </div>
+        </div>
+
+        <!-- GRAN MURALLA -->
+        <div class="card">
+            <img src="https://www.lavanguardia.com/files/og_thumbnail/uploads/2020/09/22/5fad3b63a0c72.jpeg" width="400" height="250">
+            <div class="card-content">
+                <h3>Gran Muralla China</h3>
+                <p>📍 China</p>
+                <p>La muralla más famosa del mundo.</p>
+                <p class="price">$1200 - $3500 USD</p>
+                <button class="promo-btn">Pareja</button>
+                <button class="promo-btn">Familia</button>
+                <button class="promo-btn">Solitario</button>
+                <div class="promo-result"></div>
+                <button class="reservar-btn">Reservar Ahora</button>
+            </div>
+        </div>
+        
+        <!-- PETRA -->
+        <div class="card">
+            <img src="https://geologyscience.com/wp-content/uploads/2023/01/Petra-Jordan.webp" width="400" height="250">
+            <div class="card-content">
+                <h3>Petra</h3>
+                <p>📍 Jordania</p>
+                <p>Antigua ciudad excavada en piedra rosada.</p>
+                <p class="price">$1500 - $3500 USD</p>
+                <button class="promo-btn">Pareja</button>
+                <button class="promo-btn">Familia</button>
+                <button class="promo-btn">Solitario</button>
+                <div class="promo-result"></div>
+                <button class="reservar-btn">Reservar Ahora</button>
+            </div>
+        </div>
+
+        <!-- CRISTO REDENTOR -->
+        <div class="card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-RyTJzNBn7_46vOHZzYdmmGQ9zg-y7qMfrA&s" width="400" height="250">
+            <div class="card-content">
+                <h3>Cristo Redentor</h3>
+                <p>📍 Brasil</p>
+                <p>Monumento símbolo de Río de Janeiro.</p>
+                <p class="price">$700 - $1800 USD</p>
+                <button class="promo-btn">Pareja</button>
+                <button class="promo-btn">Familia</button>
+                <button class="promo-btn">Solitario</button>
+                <div class="promo-result"></div>
+                <button class="reservar-btn">Reservar Ahora</button>
+            </div>
+        </div>
+
+        <!-- TAJ MAHAL -->
+        <div class="card">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/d/da/Taj-Mahal.jpg" width="400" height="250">
+            <div class="card-content">
+                <h3>Taj Mahal</h3>
+                <p>📍 India</p>
+                <p>Mausoleo considerado símbolo del amor.</p>
+                <p class="price">$1200 - $3000 USD</p>
+                <button class="promo-btn">Pareja</button>
+                <button class="promo-btn">Familia</button>
+                <button class="promo-btn">Solitario</button>
+                <div class="promo-result"></div>
+                <button class="reservar-btn">Reservar Ahora</button>
+            </div>
+        </div>
+
+        <!-- PIRÁMIDE DE GUIZA -->
+        <div class="card">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e3/Kheops-Pyramid.jpg" width="400" height="250">
+            <div class="card-content">
+                <h3>Pirámide de Guiza</h3>
+                <p>📍 Egipto</p>
+                <p>La única maravilla antigua que aún existe.</p>
+                <p class="price">$1300 - $3200 USD</p>
+                <button class="promo-btn">Pareja</button>
+                <button class="promo-btn">Familia</button>
+                <button class="promo-btn">Solitario</button>
+                <div class="promo-result"></div>
+                <button class="reservar-btn">Reservar Ahora</button>
+            </div>
+        </div>
+
+        <!-- JARDINES COLGANTES -->
+        <div class="card">
+            <img src="https://content-historia.nationalgeographic.com.es/medio/2019/05/07/7-maravillas-jardines-babilonia-antes_7654bcc8_1400x788.jpg" width="400" height="250">
+            <div class="card-content">
+                <h3>Jardines Colgantes</h3>
+                <p>📍 Irak</p>
+                <p>Una de las maravillas más misteriosas de la antigüedad.</p>
+                <p class="price">$1400 - $3000 USD</p>
+                <button class="promo-btn">Pareja</button>
+                <button class="promo-btn">Familia</button>
+                <button class="promo-btn">Solitario</button>
+                <div class="promo-result"></div>
+                <button class="reservar-btn">Reservar Ahora</button>
+            </div>
+        </div>
+
+        <!-- TEMPLO DE ARTEMISA -->
+        <div class="card">
+            <img src="https://sobrehistoria.com/wp-content/uploads/2016/05/templo-artemisa-efeso.jpg" width="400" height="250">
+            <div class="card-content">
+                <h3>Templo de Artemisa</h3>
+                <p>📍 Turquía</p>
+                <p>Uno de los templos más impresionantes del mundo antiguo.</p>
+                <p class="price">$1000 - $2700 USD</p>
+                <button class="promo-btn">Pareja</button>
+                <button class="promo-btn">Familia</button>
+                <button class="promo-btn">Solitario</button>
+                <div class="promo-result"></div>
+                <button class="reservar-btn">Reservar Ahora</button>
+            </div>
+        </div>
+
+        <!-- ESTATUA DE ZEUS -->
+        <div class="card">
+            <img src="https://content-historia.nationalgeographic.com.es/medio/2019/05/20/06-seven-wonders-olympia_df87f173_1200x630.jpg" width="400" height="250">
+            <div class="card-content">
+                <h3>Estatua de Zeus</h3>
+                <p>📍 Grecia</p>
+                <p>Gigantesca escultura dedicada al dios Zeus.</p>
+                <p class="price">$1200 - $2500 USD</p>
+                <button class="promo-btn">Pareja</button>
+                <button class="promo-btn">Familia</button>
+                <button class="promo-btn">Solitario</button>
+                <div class="promo-result"></div>
+                <button class="reservar-btn">Reservar Ahora</button>
+            </div>
+        </div>
+
+        <!-- MAUSOLEO DE HALICARNASO -->
+        <div class="card">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/The_maussolleion_model_dsc02711-miniaturk_nevit.jpg/250px-The_maussolleion_model_dsc02711-miniaturk_nevit.jpg" width="400" height="250">
+            <div class="card-content">
+                <h3>Mausoleo de Halicarnaso</h3>
+                <p>📍 Turquía</p>
+                <p>Monumento funerario considerado una obra maestra.</p>
+                <p class="price">$1100 - $2600 USD</p>
+                <button class="promo-btn">Pareja</button>
+                <button class="promo-btn">Familia</button>
+                <button class="promo-btn">Solitario</button>
+                <div class="promo-result"></div>
+                <button class="reservar-btn">Reservar Ahora</button>
+            </div>
+        </div>
+
+        <!-- COLOSO DE RODAS -->
+        <div class="card">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/El_Coloso_De_Rodas.jpg/330px-El_Coloso_De_Rodas.jpg" width="400" height="250">
+            <div class="card-content">
+                <h3>Coloso de Rodas</h3>
+                <p>📍 Grecia</p>
+                <p>Gigantesca estatua del dios Helios.</p>
+                <p class="price">$1300 - $2800 USD</p>
+                <button class="promo-btn">Pareja</button>
+                <button class="promo-btn">Familia</button>
+                <button class="promo-btn">Solitario</button>
+                <div class="promo-result"></div>
+                <button class="reservar-btn">Reservar Ahora</button>
+            </div>
+        </div>
+
+        <!-- FARO DE ALEJANDRÍA -->
+        <div class="card">
+            <img src="https://content-historia.nationalgeographic.com.es/medio/2019/05/07/7-maravillas-faro-alejandria-antes_809e63ba_1400x788.jpg" width="400" height="250">
+            <div class="card-content">
+                <h3>Faro de Alejandría</h3>
+                <p>📍 Egipto</p>
+                <p>Fue uno de los faros más altos del mundo antiguo.</p>
+                <p class="price">$1000 - $2400 USD</p>
+                <button class="promo-btn">Pareja</button>
+                <button class="promo-btn">Familia</button>
+                <button class="promo-btn">Solitario</button>
+                <div class="promo-result"></div>
+                <button class="reservar-btn">Reservar Ahora</button>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<div id="successOverlay" class="overlay-success">
+    <div class="modal-success-box">
+        <h1>🎉 ¡HAS RESERVADO CON ÉXITO!</h1>
+        <p>Tu solicitud ha sido procesada de manera correcta.</p>
+        <div class="details">
+            <strong style="color: #ff9800;">Resumen del viaje:</strong>
+            <p id="summaryDestino">📍 Destino: </p>
+            <p id="summaryTipo">🎒 Modalidad: </p>
+        </div>
+        <button id="closeSuccessBtn" class="close-success-btn">Excelente, ¡gracias!</button>
+    </div>
+</div>
+
+<section class="section">
+    <h2>⭐ Opiniones de Nuestros Viajeros</h2>
+    <div class="reviews-grid">
+        <div class="review-card">
+            <div class="review-stars">⭐⭐⭐⭐⭐</div>
+            <p>"Una experiencia inolvidable. El proceso de reserva web fue súper intuitivo y rápido."</p>
+            <span class="review-user">— Carlos M.</span>
+        </div>
+        <div class="review-card">
+            <div class="review-stars">⭐⭐⭐⭐</div>
+            <p>"Muy recomendable, vistas increíbles. Elegí la modalid en Pareja y la promoción superó mis expectativas."</p>
+            <span class="review-user">— Lucía R.</span>
+        </div>
+        <div class="review-card">
+            <div class="review-stars">⭐⭐⭐⭐⭐</div>
+            <p>"Me encantó el buscador inteligente. Filtré por mi presupuesto y encontré el viaje a Chichén Itzá perfecto."</p>
+            <span class="review-user">— Alejandro T.</span>
+        </div>
+        <div class="review-card">
+            <div class="review-stars">⭐⭐⭐⭐⭐</div>
+            <p>"Reservar en el modo Solitario para Machu Picchu fue facilísimo. Todo quedó listo con un solo clic."</p>
+            <span class="review-user">— Sofía G.</span>
+        </div>
+        <div class="review-card">
+            <div class="review-stars">⭐⭐⭐⭐⭐</div>
+            <p>"Usé la función de fecha aleatoria porque no sabía a dónde ir y me sorprendió con Petra. ¡El viaje de mi vida!"</p>
+            <span class="review-user">— David L.</span>
+        </div>
+        <div class="review-card">
+            <div class="review-stars">⭐⭐⭐⭐</div>
+            <p>"Viajamos en Familia al Coliseo Romano. El letrero de confirmación te da mucha seguridad al instante de pagar."</p>
+            <span class="review-user">— Mariana V.</span>
+        </div>
+        <div class="review-card">
+            <div class="review-stars">⭐⭐⭐⭐⭐</div>
+            <p>"Excelente atención al cliente y la interfaz web es limpísima. Sin botones molestos ni publicidad engañosa."</p>
+            <span class="review-user">— Fernando K.</span>
+        </div>
+        <div class="review-card">
+            <div class="review-stars">⭐⭐⭐⭐⭐</div>
+            <p>"Las promociones de las maravillas antiguas son reales. Me alegra haber seleccionado la modalidad de Pareja en Egipto."</p>
+            <span class="review-user">— Valeria P.</span>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 Maravillas del Mundo Travel</p>
+</footer>
+
+<script>
+const promociones = {
+    "Machu Picchu": {
+        pareja: "💑 Paquete romántico: 2x1 en hotel + tour privado al amanecer",
+        familia: "👨‍👩‍👧 Incluye niños gratis menores de 12 años y desayuno buffet",
+        solitario: "🧍 15% de descuento en tren Expedition para viajeros independientes"
+    },
+    "Chichén Itzá": {
+        pareja: "💑 Escapada Maya: Cena gourmet de 3 tiempos en Valladolid incluida",
+        familia: "👨‍👩‍👧 Transporte privado de hotel a zona arqueológica incluido",
+        solitario: "🧍 Acceso preferencial sin filas y tour grupal con guía nativo"
+    },
+    "Coliseo": {
+        pareja: "💑 Tour nocturno romántico por el Foro Romano con vino italiano",
+        familia: "👨‍👩‍👧 Entradas familiares VIP con acceso exclusivo a la arena",
+        solitario: "🧍 Audioguía digital premium gratuita para tu smartphone"
+    },
+    "Gran Muralla China": {
+        pareja: "💑 Sesión de fotografía profesional con trajes típicos en Mutianyu",
+        familia: "👨‍👩‍👧 Almuerzo tradicional incluido y traslado en teleférico",
+        solitario: "🧍 Pase Backpacker: Entrada directa y mapa de senderismo avanzado"
+    },
+    "Petra": {
+        pareja: "💑 Experiencia mágica: Tour nocturno 'Petra by Night' a la luz de las velas",
+        familia: "👨‍👩‍👧 Recorrido guiado en carruaje y camping beduino premium",
+        solitario: "🧍 10% de descuento en el pase de 2 días y guía de montaña"
+    },
+    "Cristo Redentor": {
+        pareja: "💑 Paseo en el tren del Corcovado + copa de espumante al atardecer",
+        familia: "👨‍👩‍👧 Combo familiar: Cristo Redentor + Pan de Azúcar al 20% OFF",
+        solitario: "🧍 Traslado express compartido desde Copacabana"
+    },
+    "Taj Mahal": {
+        pareja: "💑 Tour de lujo al amanecer con traslado en auto privado clásico",
+        familia: "👨‍👩‍👧 Hotel de 5 estrellas cercano con piscina para niños incluida",
+        solitario: "🧍 Descuento especial de temporada en el boleto internacional"
+    },
+    "Pirámide de Guiza": {
+        pareja: "💑 Paseo en camello al atardecer con sesión de fotos para dos",
+        familia: "👨‍👩‍👧 Espectáculo nocturno de luces y sonido con cena buffet",
+        solitario: "🧍 Entrada incluido al interior de la Gran Pirámide de Keops"
+    },
+    "Jardines Colgantes": {
+        pareja: "💑 Tour virtual interactivo 3D con cena temática de la antigua Babilonia",
+        familia: "👨‍👩‍👧 Libro ilustrado de historia y maquetas educativas de regalo",
+        solitario: "🧍 Acceso a la conferencia exclusiva del arqueólogo principal"
+    },
+    "Templo de Artemisa": {
+        pareja: "💑 Tour combinado Éfeso + Artemisa con cata de vinos locales",
+        familia: "👨‍👩‍👧 Guía didáctico infantil y transporte climatizado",
+        solitario: "🧍 20% de descuento en la entrada al museo arqueológico"
+    },
+    "Estatua de Zeus": {
+        pareja: "💑 Crucero romántico por las islas griegas con parada en Olimpia",
+        familia: "👨‍👩‍👧 Actividades recreativas olímpicas para niños en el sitio histórico",
+        solitario: "🧍 Pase de transporte ilimitado por la región de Elide"
+    },
+    "Mausoleo de Halicarnaso": {
+        pareja: "💑 Estadía en resort de playa en Bodrum con tour privado incluido",
+        familia: "👨‍👩‍👧 Tour en barco familiar por la costa y visita al castillo",
+        solitario: "🧍 Entrada libre al museo de arqueología subacuática"
+    },
+    "Coloso de Rodas": {
+        pareja: "💑 Paseo en velero privado por el antiguo puerto al anochecer",
+        familia: "👨‍👩‍👧 Descuentos en restaurantes familiares del casco antiguo de Rodas",
+        solitario: "🧍 Alquiler de scooter gratuito por 1 día para explorar la isla"
+    },
+    "Faro de Alejandría": {
+        pareja: "💑 Tour marítimo privado sobre las ruinas sumergidas con buceo",
+        familia: "👨‍👩‍👧 Visita guiada a la Ciudadela de Qaitbay con almuerzo marino",
+        solitario: "🧍 Mapa histórico de regalo y audioguía interactiva"
+    }
+};
+
+const successOverlay = document.getElementById("successOverlay");
+const closeSuccessBtn = document.getElementById("closeSuccessBtn");
+const summaryDestino = document.getElementById("summaryDestino");
+const summaryTipo = document.getElementById("summaryTipo");
+
+const cards = document.querySelectorAll(".destinos .card");
+
+cards.forEach(card => {
+    const titulo = card.querySelector("h3");
+    const botones = card.querySelectorAll(".promo-btn");
+    const resultado = card.querySelector(".promo-result");
+    const reservarBtn = card.querySelector(".reservar-btn");
+
+    let tipoSeleccionado = "";
+
+    botones.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const destino = titulo.innerText.trim();
+            const tipo = btn.innerText.toLowerCase().trim();
+
+            botones.forEach(b => b.classList.remove("selected"));
+            btn.classList.add("selected");
+
+            tipoSeleccionado = btn.innerText.trim();
+
+            if (promociones[destino] && promociones[destino][tipo]) {
+                resultado.innerHTML = `
+                    <p style="
+                        background:#e8f5e9;
+                        padding:10px;
+                        border-radius:8px;
+                        color:#2e7d32;
+                        font-weight:bold;
+                        margin-top:10px;
+                    ">
+                        ${promociones[destino][tipo]}
+                    </p>
+                `;
+            }
+        });
+    });
+
+    reservarBtn.addEventListener("click", () => {
+        const destino = titulo.innerText.trim();
+        const modalidad = tipoSeleccionado ? tipoSeleccionado : "Estándar (Individual)";
+
+        summaryDestino.innerHTML = `📍 <strong>Destino:</strong> ${destino}`;
+        summaryTipo.innerHTML = `🎒 <strong>Modalidad:</strong> Viaje en ${modalidad}`;
+
+        successOverlay.style.display = "flex";
+    });
+});
+
+closeSuccessBtn.addEventListener("click", () => {
+    successOverlay.style.display = "none";
+});
+
+// ====== FUNCIÓN DE BÚSQUEDA INTEGRAL ======
+const btnBuscar = document.getElementById("btnBuscar");
+const inputDestino = document.getElementById("inputDestino");
+const inputFecha = document.getElementById("inputFecha");
+const inputPresupuesto = document.getElementById("inputPresupuesto");
+const seccionDestinos = document.querySelector(".destinos");
+
+btnBuscar.addEventListener("click", () => {
+    const busqueda = inputDestino.value.toLowerCase().trim();
+    const fechaSeleccionada = inputFecha.value;
+    const presupuestoMax = parseFloat(inputPresupuesto.value);
+
+    if (!isNaN(presupuestoMax) && presupuestoMax > 0) {
+        let encontrado = false;
+        cards.forEach(card => {
+            const textoPrecio = card.querySelector(".price").innerText;
+            const precioMinimo = parseFloat(textoPrecio.replace(/[^0-9]/g, '')); 
+
+            if (precioMinimo <= presupuestoMax) {
+                card.style.display = "block";
+                encontrado = true;
+            } else {
+                card.style.display = "none";
+            }
+        });
+
+        if (encontrado) {
+            alert(`💰 Mostrando las maravillas del mundo disponibles desde menos de $${presupuestoMax} USD.`);
+            seccionDestinos.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+            alert(`❌ Lo sentimos, ninguna maravilla inicia con un presupuesto tan bajo como $${presupuestoMax} USD.`);
+            cards.forEach(card => card.style.display = "block");
+        }
+    } 
+    else if (fechaSeleccionada && busqueda === "") {
+        const listaTarjetas = Array.from(cards);
+        for (let i = listaTarjetas.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [listaTarjetas[i], listaTarjetas[j]] = [listaTarjetas[j], listaTarjetas[i]];
+        }
+
+        const cantidadAMostrar = 3;
+        cards.forEach(card => card.style.display = "none");
+
+        for (let i = 0; i < cantidadAMostrar; i++) {
+            if (listaTarjetas[i]) listaTarjetas[i].style.display = "block";
+        }
+
+        const partesFecha = fechaSeleccionada.split("-");
+        const fechaFormateada = `${partesFecha[2]}/${partesFecha[1]}/${partesFecha[0]}`;
+
+        alert(`🎲 ¡Destinos sorpresa! 3 maravillas disponibles para tu salida el ${fechaFormateada}.`);
+        seccionDestinos.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } 
+    else {
+        let encontrado = false;
+        cards.forEach(card => {
+            const nombreMaravilla = card.querySelector("h3").innerText.toLowerCase();
+            const paisMaravilla = card.querySelector("p").innerText.toLowerCase();
+
+            if (busqueda === "") {
+                card.style.display = "block";
+                encontrado = true;
+            } else if (nombreMaravilla.includes(busqueda) || paisMaravilla.includes(busqueda)) {
+                card.style.display = "block";
+                encontrado = true;
+            } else {
+                card.style.display = "none";
+            }
+        });
+
+        if (encontrado && busqueda !== "") {
+            seccionDestinos.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else if (!encontrado) {
+            alert("❌ No se encontró ninguna maravilla con ese nombre.");
+            cards.forEach(card => card.style.display = "block");
+        }
+    }
+});
+</script>
+
+</body>
+</html>
